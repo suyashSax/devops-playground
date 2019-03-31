@@ -1,0 +1,28 @@
+# Docker compose -> just to simplify docker build procedure
+# This is for our dev and test environments
+
+version: '3'
+services:
+   web:
+      build:
+         context: .
+         dockerfile: Dockerfile.dev
+      ports:
+         - "3000:3000"
+      # To reflect local changes in container, without rebuilding
+      volumes:
+         # Don't map node_modules inside container to local
+         - /app/node_modules
+         # Map pwd to /app inside container
+         - .:/app
+   tests:
+      build:
+         context: .
+         dockerfile: Dockerfile.dev
+      # To reflect local changes in container, without rebuilding
+      volumes:
+         # Don't map node_modules inside container to local
+         - /app/node_modules
+         # Map pwd to /app inside container
+         - .:/app
+      command: ["npm", "run","test"]
